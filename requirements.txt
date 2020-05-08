@@ -20,6 +20,7 @@ pycares==3.1.1
 pycparser==2.20
 pyparsing==2.4.7
 pytest==5.4.1
+python-decouple==3.3
 six==1.14.0
 wcwidth==0.1.9
 yarl==1.4.2
