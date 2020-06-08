@@ -45,3 +45,8 @@ class TestModelBasics:
             item = model()
             session.add(item)
             session.commit()
+
+    def test_if_repr_works(self, init_table):
+        session, model, data = init_table
+        row = session.query(model).first()
+        assert repr(row)
