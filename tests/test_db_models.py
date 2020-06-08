@@ -4,33 +4,29 @@ from sqlalchemy.exc import IntegrityError
 from app.db.models import ScrapedItem, ScraperInfo, Source
 
 
-class ModelTestMixin:
-    """Includes helper/convenience methods."""
+class TestScraperInfo:
 
-    def init_table(self, model, data, session):
+    @pytest.fixture(scope='function')
+    def init_table(self, db_session_with_json_data):
         """Inserts initial data to table."""
-        session.bulk_insert_mappings(model, data)
-        session.commit()
-
-
-class TestScraperInfo(ModelTestMixin):
-
-    def test_scraper_info_creation(self, db_session_with_json_data):
-        db, data = db_session_with_json_data
+        session, data = db_session_with_json_data
         scrapers = data['scraper_info']
-        self.init_table(ScraperInfo, scrapers, db)
-        count = db.query(ScraperInfo).count()
+        session.bulk_insert_mappings(ScraperInfo, scrapers)
+        session.commit()
+        return session, scrapers
+
+    def test_scraper_info_creation(self, init_table):
+        session, scrapers = init_table
+        count = session.query(ScraperInfo).count()
         assert count == len(scrapers)
 
-    def test_avoids_duplicate_scraper_name(self, db_session_with_json_data):
-        db, data = db_session_with_json_data
-        scrapers = data['scraper_info']
-        self.init_table(ScraperInfo, scrapers, db)
+    def test_avoids_duplicate_scraper_name(self, init_table):
+        session, scrapers = init_table
         existing_scraper = scrapers[0]
         with pytest.raises(IntegrityError):
             info = ScraperInfo(**existing_scraper)
-            db.add(info)
-            db.commit()
+            session.add(info)
+            session.commit()
 
     def test_enforces_non_nullable_fields(self, db_session):
         with pytest.raises(IntegrityError):
