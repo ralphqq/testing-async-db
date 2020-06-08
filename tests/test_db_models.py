@@ -7,13 +7,12 @@ from app.db.models import ScrapedItem, ScraperInfo, Source
 class TestScraperInfo:
 
     @pytest.fixture(scope='function')
-    def init_table(self, db_session_with_json_data):
+    def init_table(self, db_session, json_data):
         """Inserts initial data to table."""
-        session, data = db_session_with_json_data
-        scrapers = data['scraper_info']
-        session.bulk_insert_mappings(ScraperInfo, scrapers)
-        session.commit()
-        return session, scrapers
+        scrapers = json_data['scraper_info']
+        db_session.bulk_insert_mappings(ScraperInfo, scrapers)
+        db_session.commit()
+        return db_session, scrapers
 
     def test_scraper_info_creation(self, init_table):
         session, scrapers = init_table

@@ -31,17 +31,16 @@ def db_session():
     Base.metadata.drop_all(bind=engine)
 
 
-@pytest.fixture(scope='function')
-def db_session_with_json_data(db_session):
-    """Loads data from JSON files and yields a session.
-
-    Returns:
-        tuple: (db_session, data)
-    """
+@pytest.fixture(scope='class')
+def json_data():
+    """Loads data from JSON files and returns it as `dict`."""
     data = {}
+
     for datafile in DATA_FILES:
         fpath = os.path.join(DATA_DIR, datafile)
         fname, _ = os.path.splitext(datafile)
+
         with open(fpath, 'r', encoding='utf-8') as f:
             data[fname] = json.load(f)
-    return db_session, data
+
+    return data
