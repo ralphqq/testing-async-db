@@ -4,15 +4,25 @@ from sqlalchemy.exc import IntegrityError
 from app.db.models import ScrapedItem, ScraperInfo, Source
 
 
+def _remove_items(data, keys):
+    """Removes given keys for all items in data."""
+    for row in data:
+        for k in keys:
+            if k in row:
+                row.pop(k)
+    return data
+
+
 class TestModelBasics:
 
     @pytest.fixture(
         scope='function',
         params=[
+            (ScrapedItem, 'scraped_items'),
             (ScraperInfo, 'scraper_info'),
             (Source, 'sources'),
         ],
-        ids=['scraper', 'source']
+        ids=['scraped_item', 'scraper', 'source']
     )
     def init_table(self, request, db_session, json_data):
         """Inserts initial data to table.
@@ -22,6 +32,11 @@ class TestModelBasics:
         """
         model, name = request.param
         data = json_data[name]
+
+        if name == 'scraped_items':
+            # Remove 'scraper' and 'source' items
+            data = _remove_items(data, ['source', 'scraper'])
+
         db_session.bulk_insert_mappings(model, data)
         db_session.commit()
         return db_session, model, data
