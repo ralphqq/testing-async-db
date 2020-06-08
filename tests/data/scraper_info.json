@@ -1,0 +1,12 @@
+[
+  {
+    "name": "hackernews",
+    "site_name": "Hacker News",
+    "site_url": "https://news.ycombinator.com"
+  },
+  {
+    "name": "googlenews",
+    "site_name": "Google News",
+    "site_url": "https://news.google.com"
+  }
+]

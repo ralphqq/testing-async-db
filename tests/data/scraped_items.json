@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Largest Known Maya Structure Found",
+    "url": "https://www.insidescience.org/news/largest-known-maya-structure-found-more-4000-feet-long-and-nearly-3000-years-old",
+    "scraper": "hackernews",
+    "source": "insidescience.org"
+  },
+  {
+    "title": "‘Smart toilet’ monitors for signs of disease",
+    "url": "https://med.stanford.edu/news/all-news/2020/04/smart-toilet-monitors-for-signs-of-disease.html",
+    "scraper": "hackernews",
+    "source": "stanford.edu"
+  },
+  {
+    "title": "Brazil stops releasing Covid-19 death toll and wipes data from official site",
+    "url": "https://www.theguardian.com/world/2020/jun/07/brazil-stops-releasing-covid-19-death-toll-and-wipes-data-from-official-site",
+    "scraper": "googlenews",
+    "source": "theguardian.com"
+  },
+  {
+    "title": "PH COVID-19 cases rise to 21,895; death toll breaches 1,000-mark",
+    "url": "https://newsinfo.inquirer.net/1287662/ph-covid-19-cases-rise-to-21895-death-toll-breaches-1000-mark",
+    "scraper": "googlenews",
+    "source": "inquirer.net"
+  }
+]
