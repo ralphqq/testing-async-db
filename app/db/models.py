@@ -29,6 +29,35 @@ class CommonFieldsMixin:
 
     id = Column(Integer, primary_key=True)
 
+    @classmethod
+    def get_or_create(cls, session, **kwargs):
+        """Gets a record or creates if it does not yet exist.
+
+        Args:
+            session (Session object): current ORM session
+            **kwargs: fields and values for filtering
+
+        Returns:
+            (obj, bool) where:
+                obj: the created/retrieved instance
+                bool: True if obj is a new object, False otherwise
+        """
+        is_new_instance = False
+        instance = session.query(cls).filter_by(**kwargs).first()
+
+        if not instance:
+            try:
+                with session.begin_nested():
+                    instance = cls(**kwargs)
+                session.add(instance)
+                session.flush()
+            except IntegrityError:
+                session.rollback()
+            else:
+                is_new_instance = True
+
+        return instance, is_new_instance
+
 
 class ScraperInfo(CommonFieldsMixin, Base):
     __tablename__ = 'scraper_info'
