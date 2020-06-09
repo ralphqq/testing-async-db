@@ -3,7 +3,9 @@ import os
 
 import pytest
 
+from app.db.models import Base
 from settings import BASE_DIR
+from tests.db import engine, delete_rows, Session
 
 
 DATA_DIR = os.path.join(BASE_DIR, 'tests/data')
@@ -14,21 +16,22 @@ DATA_FILES = [
 ]
 
 
-@pytest.fixture(scope='function')
-def db_session():
-    """Sets up and tears down database session."""
-    from app.db.models import Base
-    from tests.db import engine, Session
-
-    # Create all tables and yield a scoped session instance
+@pytest.fixture(scope='class')
+def init_db():
+    """Creates and drops db."""
     Base.metadata.create_all(engine)
+    yield
+    Base.metadata.drop_all(bind=engine)
+
+
+@pytest.fixture(scope='function')
+def db_session(init_db):
+    """Sets up and tears down db session."""
     session = Session()
     yield session
-
-    # Close the session and drop all tables
     session.rollback()
     session.close()
-    Base.metadata.drop_all(bind=engine)
+    delete_rows(db_engine=engine, base_obj=Base)
 
 
 @pytest.fixture(scope='class')
