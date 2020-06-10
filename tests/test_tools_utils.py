@@ -16,16 +16,13 @@ class TestGetDomainName:
             result = get_domain_name(url)
             assert result == domain_name
 
-    @pytest.mark.parametrize(
-        'url,domain_name',
-        [
-            ('www.google.com/incomplete.html', ''),
-            ('blog.stackoverflow.com', ''),
-            ('not-a-url', ''),
-        ]
-    )
-    def test_invalid_urls_return_empty_str(self, url, domain_name):
-        assert get_domain_name(url) == domain_name
+    @pytest.mark.parametrize('url', [
+        'www.google.com/incomplete.html',
+        'blog.stackoverflow.com',
+        'not-a-url',
+    ])
+    def test_invalid_urls_return_empty_str(self, url):
+        assert get_domain_name(url) == ''
 
     def test_exceptions_cause_domain_getter_to_return_none(self, monkeypatch):
         def mocked_urlparse():
