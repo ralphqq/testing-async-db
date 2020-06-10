@@ -47,3 +47,14 @@ def json_data():
             data[fname] = json.load(f)
 
     return data
+
+
+@pytest.fixture(scope='function')
+def scraped_item_source_data(json_data):
+    """Matches scraped items with sources then returns list of tuples."""
+    scraped_items = json_data['scraped_items']
+    sources = json_data['sources']
+    return [
+        (itm, src) for itm in scraped_items for src in sources
+        if itm['source'] == src['domain']
+    ]

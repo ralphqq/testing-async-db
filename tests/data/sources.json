@@ -1,6 +1,6 @@
 [
-  {"domain": "inquirer.net"},
-  {"domain": "theguardian.com"},
-  {"domain": "stanford.edu"},
-  {"domain": "insidescience.org"}
+  {"domain": "newsinfo.inquirer.net"},
+  {"domain": "www.theguardian.com"},
+  {"domain": "med.stanford.edu"},
+  {"domain": "www.insidescience.org"}
 ]

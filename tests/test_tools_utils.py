@@ -5,6 +5,17 @@ from app.tools.utils import get_domain_name
 
 class TestGetDomainName:
 
+    @pytest.fixture
+    def item_source_domain_pairs(self, scraped_item_source_data):
+        return [
+            (itm['url'], src['domain']) for itm, src in scraped_item_source_data
+        ]
+
+    def test_domain_getter_util(self, item_source_domain_pairs):
+        for url, domain_name in item_source_domain_pairs:
+            result = get_domain_name(url)
+            assert result == domain_name
+
     @pytest.mark.parametrize(
         'url,domain_name',
         [
