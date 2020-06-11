@@ -18,7 +18,7 @@ from sqlalchemy import (
     String,
 )
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Session
 
 
 Base = declarative_base()
@@ -30,7 +30,7 @@ class CommonFieldsMixin:
     id = Column(Integer, primary_key=True)
 
     @classmethod
-    def get_or_create(cls, session, **kwargs):
+    def get_or_create(cls, session: Session, **kwargs) -> tuple:
         """Gets a record or creates if it does not yet exist.
 
         Args:
@@ -71,7 +71,7 @@ class ScraperInfo(CommonFieldsMixin, Base):
         lazy='dynamic'
     )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<Scraper {self.name}>'
 
 
@@ -84,7 +84,7 @@ class ScrapedItem(CommonFieldsMixin, Base):
     scraper_id = Column(Integer, ForeignKey('scraper_info.id'))
     scraped_ts = Column(DateTime, default=datetime.utcnow)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<ScrapedItem {self.title}>'
 
 
@@ -98,5 +98,12 @@ class Source(CommonFieldsMixin, Base):
         lazy='dynamic'
     )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<Source {self.domain}>'
+
+
+MODELS_LIST = [
+    ScrapedItem,
+    ScraperInfo,
+    Source,
+]
