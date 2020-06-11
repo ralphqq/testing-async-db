@@ -37,4 +37,5 @@ class TestDBConnection:
         db = DBConnection()
         await db.init(config=DATABASE)
         await db.close()
-        assert db.engine is None
+        with pytest.raises(RuntimeError):
+            conn = await db.engine.acquire()
