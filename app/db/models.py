@@ -103,7 +103,7 @@ class Source(CommonFieldsMixin, Base):
 
 
 MODELS_LIST = [
-    ScrapedItem,
     ScraperInfo,
     Source,
+    ScrapedItem,
 ]
