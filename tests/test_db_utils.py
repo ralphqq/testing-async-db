@@ -30,19 +30,25 @@ class TestDBUtils:
             await conn.execute("GRANT ALL ON SCHEMA public TO public")
         db_engine.close()
 
-    @pytest.mark.asyncio
-    async def test_create_tables_function(self, engine):
-        await create_tables(engine=engine, tables=MODELS_LIST)
+    @pytest.fixture
+    async def init_tables(self, engine):
+        """Runs create_tables then returns engine and common SQL text."""
+        await create_tables(engine, MODELS_LIST)
 
+        query = text(
+            """
+            SELECT tablename
+            FROM pg_tables
+            WHERE schemaname = 'public'
+            """
+        )
+        return engine, query
+
+    @pytest.mark.asyncio
+    async def test_create_tables_function(self, init_tables):
+        engine, query = init_tables
         results = None
         async with engine.acquire() as conn:
-            query = text(
-                """
-                SELECT tablename
-                FROM pg_tables
-                WHERE schemaname = 'public'
-                """
-            )
             rows = await conn.execute(query)
             results = await rows.fetchall()
 
