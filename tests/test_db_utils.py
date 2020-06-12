@@ -55,3 +55,15 @@ class TestDBUtils:
         fetched_tablenames = [res[0] for res in results]
         for table in MODELS_LIST:
             assert table.__tablename__ in fetched_tablenames
+
+    @pytest.mark.asyncio
+    async def test_delete_tables_function(self, init_tables):
+        engine, query = init_tables
+        await delete_tables(engine, MODELS_LIST)
+
+        results = None
+        async with engine.acquire() as conn:
+            rows = await conn.execute(query)
+            results = await rows.fetchall()
+
+        assert not results
