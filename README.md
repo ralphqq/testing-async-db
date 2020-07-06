@@ -27,8 +27,7 @@ Fields:
 - `url`
 
 ## To-do
-1. Define database models for scraped item, scraper details, and sources tables
-2. Create base scraper class
-3. Define item pipeline
-4. Create a scraper for each of the above websites
-5. Make a runner script
+1. Create base scraper class
+2. Define item pipeline
+3. Create a scraper for each of the above websites
+4. Make a runner script
